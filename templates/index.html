@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+</head>
+<body>
+    
+
+    <div class="row center">
+        <div class="col-1">
+            <div class="card card-body">
+                    <p class="alert"></p>
+               
+                    <input type="text" class="textInput"  placeholder="Genre..." id="genre" name="genre">
+                    <button class="primary" id="search" >Search</button>
+                
+                </div>
+                <div class="row center">
+                    <img id="overlay" src="https://i.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.webp">
+                <table class="tracksTable" id="table">
+                    <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Preview</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                   
+                </tbody>
+                </table>
+            </div>
+         </div>
+
+    </div>
+
+
+
+    <!-- script area -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script>
+        
+        $("#search").click(function(){
+           
+            $("#overlay").fadeIn(100);
+            let genre=$("#genre").val();
+            if(genre){
+                $.ajax({
+                     url:"/tracks/"+genre,
+                     method:'get',
+                     data:{},
+                     success:function(res){
+                         let response=JSON.parse(res);
+                         let table="";
+                        // console.log(response.error);
+                         if(!response.error){
+                            for(let i=0; i<response.length;i++){
+                           //  console.log(response[i]);
+                             let artist=response[i].name;
+                             let track=response[i].track;
+                             let pre_url=response[i].preview_url;
+                             let album_image=response[i].album_image
+                              table+=`   
+                                        <tr>
+                                            <td>${artist}</td>
+                                            <td>${track}</td>
+                                            
+                                            <td> <a target="_blank" href="${pre_url}"> <img class="small" src="${album_image}"> </a></td>
+                                            <td>
+                                                <audio controls="controls">
+                                                    <source src="${pre_url}">
+                                                </audio>
+                                            </td>
+                                        </tr>
+                                    `
+
+                         }
+                         $(".alert").text("");
+                         $("#table").show();
+                         $("#overlay").fadeOut(300);
+                         $("#tableBody").html(table);
+                         }else{
+                            $("#overlay").fadeOut(300);
+                            $("#table").hide();
+                            $(".alert").text(response.error);
+
+
+                         }
+                        
+                     }
+                })
+            }
+
+        });
+      
+    </script>
+</body>
+</html>
