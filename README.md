@@ -1,6 +1,6 @@
 # Dependencies
    + Flask
-   + requests
+   + requests(http request)
 # Install
    + pip install flask
    + pip install requests
