@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Tracks</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <div class="container">
+<div class="row center">
+    <div class="col-1">
+        <table class="tracksTable" id="table">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Preview</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in data %}
+            <tr>
+                <td>{{d['name']}}</td>
+                <td>{{d['track']}}</td>
+                
+                <td> <a target="_blank" href="{{d['preview_url']}}"> <img class="small" src="{{d['album_image']}}"> </a></td>
+                <td>
+                    <audio controls="controls">
+                        <source src="{{d['preview_url']}}">
+                    </audio>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        </table>
+    </div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#table").DataTable();
+    });
+   
+</script>
+</body>
+</html>
